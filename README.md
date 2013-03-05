@@ -41,7 +41,7 @@ The Synchronous version still uses callbacks, so it is safe to use with other As
     // walker = walk.walkSync("/tmp", options);
 
     walker.on("names", function (root, nodeNamesArray) {
-      nodeNames.sort(function (a, b) {
+      nodeNamesArray.sort(function (a, b) {
         if (a > b) return 1;
         if (a < b) return -1;
         return 0;
