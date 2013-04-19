@@ -33,6 +33,8 @@ The Synchronous version still uses callbacks, so it is safe to use with other As
 
     options = {
         followLinks: false,
+        // asyncFilters: ["Temp", ""] // directories with these
+                                      // keys will be ignored
     };
 
     walker = walk.walk("/tmp", options);
