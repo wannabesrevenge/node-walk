@@ -2,39 +2,42 @@
   "use strict";
 
   var walk = require('./lib/walk')
-    , _ = require('underscore')
     , fs = require('fs')
-    , sync = false
-    , walker;
+    , options
+    , walker
+    ;
 
-  console.log(walk);
+  options = {
+      listeners: {
+          names: function (root, nodeNamesArray) {
+            nodeNamesArray.sort(function (a, b) {
+              if (a > b) return 1;
+              if (a < b) return -1;
+              return 0;
+            });
+          }
+        , directories: function (root, dirStatsArray, next) {
+            // dirStatsArray is an array of `stat` objects with the additional attributes
+            // * type
+            // * error
+            // * name
+            
+            next();
+          }
+        , file: function (root, fileStats, next) {
+            fs.readFile(fileStats.name, function () {
+              // doStuff
+              console.log(root, fileStats.name);
+              next();
+            });
+          }
+        , errors: function (root, nodeStatsArray, next) {
+            next();
+          }
+      }
+  };
 
-  walker = walk.walk(".");
+  walker = walk.walkSync("/tmp", options);
 
-  walker.on("directory", function (root, dirStatsArray, next) {
-    // dirStatsArray is an array of `stat` objects with the additional attributes
-    // * type
-    // * error
-    // * name
-    //console.log(_.pluck(dirStatsArray, 'name'));
-    console.log(root + '/' + dirStatsArray.name);
-    
-    next();
-  });
-
-  walker.on("file", function (root, fileStats, next) {
-    console.log(root + '/' + fileStats.name);
-
-    next();
-  });
-
-  walker.on("errors", function (root, nodeStatsArray, next) {
-    //console.log(nodeStatsArray);
-
-    next();
-  });
-
-  walker.on("end", function () {
-    console.log("all done");
-  });
+  console.log("all done");
 }());
