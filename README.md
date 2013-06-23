@@ -96,6 +96,8 @@ but I believe it will still finish in a single event loop as-is
     , walker
     ;
 
+  # To be truly synchronous in the emitter and maintain a compatible api,
+  # the listeners must be listed before the object is created
   options = {
     listeners: {
       names: function (root, nodeNamesArray) {
