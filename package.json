@@ -11,6 +11,9 @@
   "lib"           : ".",
   "main"          : "./walk.js",
   "version"       : "2.2.1",
+  "repository": {
+    "url": "git://github.com/coolaj86/node-walk.git"
+  },
   "licenses": [
     {
       "type": "MIT",
