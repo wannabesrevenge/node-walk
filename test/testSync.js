@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  var walk = require('./lib/walk')
+  var walk = require('../lib/walk')
     , fs = require('fs')
     , options
     , walker
