@@ -24,96 +24,111 @@ Usage
 
 Both Asynchronous and Synchronous versions are provided.
 
-var walk = require('walk')
-  , fs = require('fs')
-  , options
-  , walker
-  ;
+```javascript
+(function () {
+  "use strict";
 
-options = {
-    followLinks: false,
-};
+  var walk = require('walk')
+    , fs = require('fs')
+    , options
+    , walker
+    ;
 
-walker = walk.walk("/tmp", options);
+  options = {
+    followLinks: false
+    // directories with these keys will be skipped
+  , filters: ["Temp", "_Temp"]
+  };
 
-// OR
-// walker = walk.walkSync("/tmp", options);
+  walker = walk.walk("/tmp", options);
 
-walker.on("names", function (root, nodeNamesArray) {
-  nodeNames.sort(function (a, b) {
-    if (a > b) return 1;
-    if (a < b) return -1;
-    return 0;
+  // OR
+  // walker = walk.walkSync("/tmp", options);
+
+  walker.on("names", function (root, nodeNamesArray) {
+    nodeNamesArray.sort(function (a, b) {
+      if (a > b) return 1;
+      if (a < b) return -1;
+      return 0;
+    });
   });
-});
 
-walker.on("directories", function (root, dirStatsArray, next) {
-  // dirStatsArray is an array of `stat` objects with the additional attributes
-  // * type
-  // * error
-  // * name
-  
-  next();
-});
-
-walker.on("file", function (root, fileStats, next) {
-  fs.readFile(fileStats.name, function () {
-    // doStuff
+  walker.on("directories", function (root, dirStatsArray, next) {
+    // dirStatsArray is an array of `stat` objects with the additional attributes
+    // * type
+    // * error
+    // * name
+    
     next();
   });
-});
 
-walker.on("errors", function (root, nodeStatsArray, next) {
-  next();
-});
+  walker.on("file", function (root, fileStats, next) {
+    fs.readFile(fileStats.name, function () {
+      // doStuff
+      next();
+    });
+  });
 
-walker.on("end", function () {
-  console.log("all done");
-});
+  walker.on("errors", function (root, nodeStatsArray, next) {
+    next();
+  });
+
+  walker.on("end", function () {
+    console.log("all done");
+  });
+}());
 ```
-### Async
 
-The Synchronous version can operate without a callback if the event handlers are passed in
+### Sync
+
+Note: Due to changes in EventEmitter,
+I don't think it's possible to create a truly synchronous walker,
+but I believe it will still finish in a single event loop as-is
+(due to changes in process.nextTick).
 
 ```javascript
-var walk = require('walk')
-  , fs = require('fs')
-  , options
-  , walker
-  ;
+(function () {
+  "use strict";
 
-options = {
+  var walk = require('walk')
+    , fs = require('fs')
+    , options
+    , walker
+    ;
+
+  options = {
     listeners: {
-        names: function (root, nodeNamesArray) {
-          nodeNames.sort(function (a, b) {
-            if (a > b) return 1;
-            if (a < b) return -1;
-            return 0;
-          });
-        }
-      , directories: function (root, dirStatsArray, next) {
-          // dirStatsArray is an array of `stat` objects with the additional attributes
-          // * type
-          // * error
-          // * name
-          
+      names: function (root, nodeNamesArray) {
+        nodeNames.sort(function (a, b) {
+          if (a > b) return 1;
+          if (a < b) return -1;
+          return 0;
+        });
+      }
+    , directories: function (root, dirStatsArray, next) {
+        // dirStatsArray is an array of `stat` objects with the additional attributes
+        // * type
+        // * error
+        // * name
+        
+        next();
+      }
+    , file: function (root, fileStats, next) {
+        fs.readFile(fileStats.name, function () {
+          // doStuff
           next();
-        }
-      , file: function (root, fileStats, next) {
-          fs.readFile(fileStats.name, function () {
-            // doStuff
-            next();
-          });
-        }
-      , errors: function (root, nodeStatsArray, next) {
-          next();
-        }
+        });
+      }
+    , errors: function (root, nodeStatsArray, next) {
+        next();
+      }
     }
-};
+  };
 
-walker = walk.walkSync("/tmp", options);
+  walker = walk.walkSync("/tmp", options);
 
-console.log("all done");
+  console.log("all done");
+}());
 ```
 
 API
