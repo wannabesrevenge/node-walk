@@ -24,53 +24,97 @@ Usage
 
 Both Asynchronous and Synchronous versions are provided.
 
-The Synchronous version still uses callbacks, so it is safe to use with other Asynchronous functions and will still work as expected.
+var walk = require('walk')
+  , fs = require('fs')
+  , options
+  , walker
+  ;
 
-    var walk = require('walk'),
-      fs = require('fs'),
-      options,
-      walker;
+options = {
+    followLinks: false,
+};
 
-    options = {
-        followLinks: false,
-    };
+walker = walk.walk("/tmp", options);
 
-    walker = walk.walk("/tmp", options);
+// OR
+// walker = walk.walkSync("/tmp", options);
 
-    // OR
-    // walker = walk.walkSync("/tmp", options);
+walker.on("names", function (root, nodeNamesArray) {
+  nodeNames.sort(function (a, b) {
+    if (a > b) return 1;
+    if (a < b) return -1;
+    return 0;
+  });
+});
 
-    walker.on("names", function (root, nodeNamesArray) {
-      nodeNames.sort(function (a, b) {
-        if (a > b) return 1;
-        if (a < b) return -1;
-        return 0;
-      });
-    });
+walker.on("directories", function (root, dirStatsArray, next) {
+  // dirStatsArray is an array of `stat` objects with the additional attributes
+  // * type
+  // * error
+  // * name
+  
+  next();
+});
 
-    walker.on("directories", function (root, dirStatsArray, next) {
-      // dirStatsArray is an array of `stat` objects with the additional attributes
-      // * type
-      // * error
-      // * name
-      
-      next();
-    });
+walker.on("file", function (root, fileStats, next) {
+  fs.readFile(fileStats.name, function () {
+    // doStuff
+    next();
+  });
+});
 
-    walker.on("file", function (root, fileStats, next) {
-      fs.readFile(fileStats.name, function () {
-        // doStuff
-        next();
-      });
-    });
+walker.on("errors", function (root, nodeStatsArray, next) {
+  next();
+});
 
-    walker.on("errors", function (root, nodeStatsArray, next) {
-      next();
-    });
+walker.on("end", function () {
+  console.log("all done");
+});
+```
+### Async
 
-    walker.on("end", function () {
-      console.log("all done");
-    });
+The Synchronous version can operate without a callback if the event handlers are passed in
+
+```javascript
+var walk = require('walk')
+  , fs = require('fs')
+  , options
+  , walker
+  ;
+
+options = {
+    listeners: {
+        names: function (root, nodeNamesArray) {
+          nodeNames.sort(function (a, b) {
+            if (a > b) return 1;
+            if (a < b) return -1;
+            return 0;
+          });
+        }
+      , directories: function (root, dirStatsArray, next) {
+          // dirStatsArray is an array of `stat` objects with the additional attributes
+          // * type
+          // * error
+          // * name
+          
+          next();
+        }
+      , file: function (root, fileStats, next) {
+          fs.readFile(fileStats.name, function () {
+            // doStuff
+            next();
+          });
+        }
+      , errors: function (root, nodeStatsArray, next) {
+          next();
+        }
+    }
+};
+
+walker = walk.walkSync("/tmp", options);
+
+console.log("all done");
+```
 
 API
 ====
