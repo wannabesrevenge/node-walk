@@ -82,9 +82,12 @@ Both Asynchronous and Synchronous versions are provided.
 ### Sync
 
 Note: You **can't use EventEmitter** if you want truly synchronous walker
-(although it's synchronous, it appears not to be due to the use of `process.nextTick()`).
+(although it's synchronous under the hood, it appears not to be due to the use of `process.nextTick()`).
 
 Instead **you must use `options.listeners`** for truly synchronous walker.
+
+Although the sync version uses all of the `fs.readSync`, `fs.readdirSync`, and other sync methods,
+I don't think I can prevent the `process.nextTick()` that `EventEmitter` calls.
 
 ```javascript
 (function () {
