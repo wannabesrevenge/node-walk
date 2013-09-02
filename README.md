@@ -81,10 +81,10 @@ Both Asynchronous and Synchronous versions are provided.
 
 ### Sync
 
-Note: Due to changes in EventEmitter,
-I don't think it's possible to create a truly synchronous walker,
-but I believe it will still finish in a single event loop as-is
-(due to changes in process.nextTick).
+Note: You **can't use EventEmitter** if you want truly synchronous walker
+(although it's synchronous, it appears not to be due to the use of `process.nextTick()`).
+
+Instead **you must use `options.listeners`** for truly synchronous walker.
 
 ```javascript
 (function () {
@@ -96,8 +96,8 @@ but I believe it will still finish in a single event loop as-is
     , walker
     ;
 
-  # To be truly synchronous in the emitter and maintain a compatible api,
-  # the listeners must be listed before the object is created
+  // To be truly synchronous in the emitter and maintain a compatible api,
+  // the listeners must be listed before the object is created
   options = {
     listeners: {
       names: function (root, nodeNamesArray) {
