@@ -2,13 +2,24 @@
   "use strict";
 
   var walk = require('../lib/walk').walk
+    , path = require('path')
+    , dirname = process.argv[2] || './'
     , walker
     ;
 
-  walker = walk('./');
-  walker.on('file', function (root, stat, next) {
-    console.log(root, stat.name);
+  walker = walk(dirname);
+
+  walker.on('directory', function (root, stat, next) {
+    console.log('[d]', path.join(root, stat.name));
     next();
   });
 
+  walker.on('file', function (root, stat, next) {
+    console.log('[f]', path.join(root, stat.name));
+    next();
+  });
+
+  walker.on('end', function () {
+    console.log('All Done!');
+  });
 }());
