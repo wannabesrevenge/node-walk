@@ -13,11 +13,11 @@
   "author": "AJ ONeal <coolaj86@gmail.com>",
   "contributors": [],
   "dependencies": {
-    "forEachAsync": "~2.2"
+    "foreachasync": "3.x"
   },
   "lib": ".",
   "main": "./lib/walk.js",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "repository": {
     "url": "git://github.com/coolaj86/node-walk.git"
   },
