@@ -104,7 +104,7 @@ I don't think I can prevent the `process.nextTick()` that `EventEmitter` calls.
   options = {
     listeners: {
       names: function (root, nodeNamesArray) {
-        nodeNames.sort(function (a, b) {
+        nodeNamesArray.sort(function (a, b) {
           if (a > b) return 1;
           if (a < b) return -1;
           return 0;
