@@ -17,7 +17,7 @@
   },
   "lib": ".",
   "main": "./lib/walk.js",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "repository": {
     "url": "git://github.com/coolaj86/node-walk.git"
   },
@@ -39,6 +39,9 @@
     "example": "examples",
     "test": "test"
   },
+  "files": [
+    "lib"
+  ],
   "devDependencies": {},
   "scripts": {
     "test": "./test/walk-test.sh"
