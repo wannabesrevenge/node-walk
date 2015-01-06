@@ -37,7 +37,7 @@ var walk = require('walk')
 walker = walk.walk("/tmp" { followLinks: false });
 
 walker.on("file", fileHandler);
-walker.on("errors", errorHandler);
+walker.on("errors", errorsHandler); // plural
 walker.on("end", endHandler);
 ```
 
@@ -53,7 +53,7 @@ function fileHandler(root, fileStats, next) {
   });
 }
 
-function errorHandler(root, nodeStatsArray, next) {
+function errorsHandler(root, nodeStatsArray, next) {
   nodeStatsArray.forEach(function (n) {
     console.error("[ERROR] " + n.name)
     console.error(n.error.message || (n.error.code + ": " + n.error.path));
