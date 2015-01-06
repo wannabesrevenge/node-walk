@@ -17,9 +17,84 @@ This is particularly well suited for single hard disks which are not flash or so
 Installation
 ----
 
-    npm install walk
+```bash
+npm install --save walk
+```
 
-Usage
+Getting Started
+====
+
+```javascript
+(function () {
+  "use strict";
+
+  var walk = require('walk')
+    , fs = require('fs')
+    , walker
+    ;
+
+  walker = walk.walk("/tmp", options);
+
+  walker.on("file", function (root, fileStats, next) {
+    fs.readFile(fileStats.name, function () {
+      // doStuff
+      next();
+    });
+  });
+
+  walker.on("errors", function (root, nodeStatsArray, next) {
+    next();
+  });
+
+  walker.on("end", function () {
+    console.log("all done");
+  });
+}());
+```
+
+Common Events
+-----
+
+All single event callbacks are in the form of `function (root, stat, next) {}`.
+
+All multiple event callbacks callbacks are in the form of `function (root, stats, next) {}`, except **names** which is an array of strings.
+
+All **error** event callbacks are in the form `function (root, stat/stats, next) {}`.
+**`stat.error`** contains the error.
+
+* `names`
+* `directory`
+* `directories`
+* `file`
+* `files`
+* `end`
+* `nodeError` (`stat` failed)
+* `directoryError` (`stat` succedded, but `readdir` failed)
+* `errors` (a collection of any errors encountered)
+
+
+A typical `stat` event looks like this:
+
+```javascript
+{ dev: 16777223,
+  mode: 33188,
+  nlink: 1,
+  uid: 501,
+  gid: 20,
+  rdev: 0,
+  blksize: 4096,
+  ino: 49868100,
+  size: 5617,
+  blocks: 16,
+  atime: Mon Jan 05 2015 18:18:10 GMT-0700 (MST),
+  mtime: Thu Sep 25 2014 21:21:28 GMT-0600 (MDT),
+  ctime: Thu Sep 25 2014 21:21:28 GMT-0600 (MDT),
+  birthtime: Thu Sep 25 2014 21:21:28 GMT-0600 (MDT),
+  name: 'README.md',
+  type: 'file' }
+```
+
+Advanced Example
 ====
 
 Both Asynchronous and Synchronous versions are provided.
