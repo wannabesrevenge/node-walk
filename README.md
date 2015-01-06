@@ -25,31 +25,33 @@ Getting Started
 ====
 
 ```javascript
-(function () {
-  "use strict";
+"use strict";
 
-  var walk = require('walk')
-    , fs = require('fs')
-    , walker
-    ;
+var walk = require('walk')
+  , fs = require('fs')
+  , walker
+  ;
 
-  walker = walk.walk("/tmp", options);
+walker = walk.walk("/tmp", options);
 
-  walker.on("file", function (root, fileStats, next) {
-    fs.readFile(fileStats.name, function () {
-      // doStuff
-      next();
-    });
-  });
-
-  walker.on("errors", function (root, nodeStatsArray, next) {
+walker.on("file", function (root, fileStats, next) {
+  fs.readFile(path.resolve(root, fileStats.name), function (buffer) {
+    console.log(fileStats.name, buffer.byteLength);
     next();
   });
+});
 
-  walker.on("end", function () {
-    console.log("all done");
+walker.on("errors", function (root, nodeStatsArray, next) {
+  nodeStatsArray.forEach(function (n) {
+    console.error("[ERROR] " + n.name)
+    console.error(n.error.message);
   });
-}());
+  next();
+});
+
+walker.on("end", function () {
+  console.log("all done");
+});
 ```
 
 Common Events
@@ -138,7 +140,7 @@ Both Asynchronous and Synchronous versions are provided.
   });
 
   walker.on("file", function (root, fileStats, next) {
-    fs.readFile(fileStats.name, function () {
+    fs.readFile(path.join(root, fileStats.name), function () {
       // doStuff
       next();
     });
