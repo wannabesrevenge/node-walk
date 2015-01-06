@@ -44,7 +44,7 @@ walker.on("file", function (root, fileStats, next) {
 walker.on("errors", function (root, nodeStatsArray, next) {
   nodeStatsArray.forEach(function (n) {
     console.error("[ERROR] " + n.name)
-    console.error(n.error.message);
+    console.error(n.error.message || (n.error.code + ": " + n.error.path));
   });
   next();
 });
