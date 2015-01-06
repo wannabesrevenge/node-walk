@@ -17,7 +17,7 @@
   },
   "lib": ".",
   "main": "./lib/walk.js",
-  "version": "2.3.5",
+  "version": "2.3.6",
   "repository": {
     "url": "git://github.com/coolaj86/node-walk.git"
   },
