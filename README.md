@@ -34,24 +34,29 @@ var walk = require('walk')
 
 walker = walk.walk("/tmp", options);
 
-walker.on("file", function (root, fileStats, next) {
+function (root, fileStats, next) {
   fs.readFile(path.resolve(root, fileStats.name), function (buffer) {
     console.log(fileStats.name, buffer.byteLength);
     next();
   });
-});
+}
 
-walker.on("errors", function (root, nodeStatsArray, next) {
+walker.on("file", fileHandler);
+walker.on("errors", errorHandler);
+walker.on("end", endHandler);
+
+
+function errorHandler(root, nodeStatsArray, next) {
   nodeStatsArray.forEach(function (n) {
     console.error("[ERROR] " + n.name)
     console.error(n.error.message || (n.error.code + ": " + n.error.path));
   });
   next();
-});
+}
 
-walker.on("end", function () {
+function endHandler() {
   console.log("all done");
-});
+}
 ```
 
 Common Events
