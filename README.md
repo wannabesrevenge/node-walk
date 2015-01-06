@@ -29,8 +29,8 @@ Choose wisely the path you walk, like so:
 ```javascript
 "use strict";
 
-var walk = require('walk')
-  , fs = require('fs')
+var walk    = require('walk')
+  , fs      = require('fs')
   , walker
   ;
 
