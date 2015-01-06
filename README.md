@@ -31,10 +31,8 @@ Choose wisely the path you walk, like so:
 
 var walk    = require('walk')
   , fs      = require('fs')
-  , walker
+  , walker  = walk.walk("/tmp" { followLinks: false })
   ;
-
-walker = walk.walk("/tmp" { followLinks: false });
 
 walker.on("file", fileHandler);
 walker.on("errors", errorsHandler); // plural
