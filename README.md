@@ -270,7 +270,7 @@ Events with Array Arguments - fired after all files in the dir have been `stat`e
 
 **Warning** beware of infinite loops when `followLinks` is true (using `walk-recurse` varient).
 
-Comparisons
+Performance
 ====
 
 Tested on my `/System` containing 59,490 (+ self) directories (and lots of files).
