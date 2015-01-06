@@ -24,6 +24,8 @@ npm install --save walk
 Getting Started
 ====
 
+Choose wisely the path you walk, like so:
+
 ```javascript
 "use strict";
 
@@ -32,19 +34,24 @@ var walk = require('walk')
   , walker
   ;
 
-walker = walk.walk("/tmp", options);
+walker = walk.walk("/tmp" { followLinks: false });
 
-function (root, fileStats, next) {
+walker.on("file", fileHandler);
+walker.on("errors", errorHandler);
+walker.on("end", endHandler);
+```
+
+Where your handlers might look something like these:
+
+```javascript
+'use strict';
+
+function fileHandler(root, fileStats, next) {
   fs.readFile(path.resolve(root, fileStats.name), function (buffer) {
     console.log(fileStats.name, buffer.byteLength);
     next();
   });
 }
-
-walker.on("file", fileHandler);
-walker.on("errors", errorHandler);
-walker.on("end", endHandler);
-
 
 function errorHandler(root, nodeStatsArray, next) {
   nodeStatsArray.forEach(function (n) {
