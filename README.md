@@ -44,9 +44,9 @@ Where your handlers might look something like these:
 ```javascript
 'use strict';
 
-function fileHandler(root, fileStats, next) {
-  fs.readFile(path.resolve(root, fileStats.name), function (buffer) {
-    console.log(fileStats.name, buffer.byteLength);
+function fileHandler(root, fileStat, next) {
+  fs.readFile(path.resolve(root, fileStat.name), function (buffer) {
+    console.log(fileStat.name, buffer.byteLength);
     next();
   });
 }
