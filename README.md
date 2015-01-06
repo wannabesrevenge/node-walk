@@ -158,8 +158,7 @@ Single Events - fired immediately
   * `nodeError` - Error `fstat` did not succeeded.
   * `node` - a `stats` object for a node of any type
   * `file` - includes links when `followLinks` is `true`
-    * Note: This feature is broken in the current version, but works in the previous `walk-recursive` version
-  * `directory`
+  * `directory` - **NOTE** you could get a recursive loop if `followLinks` and a directory links to its parent
   * `symbolicLink` - always empty when `followLinks` is `true`
   * `blockDevice`
   * `characterDevice`
