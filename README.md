@@ -31,6 +31,7 @@ Choose wisely the path you walk, like so:
 
 var walk    = require('walk')
   , fs      = require('fs')
+  , path    = require('path')
   , walker  = walk.walk("/tmp", { followLinks: false })
   ;
 
