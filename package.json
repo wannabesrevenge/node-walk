@@ -21,16 +21,7 @@
   "repository": {
     "url": "git://github.com/coolaj86/node-walk.git"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://www.opensource.org/licenses/mit-license.php"
-    },
-    {
-      "type": "Apache2",
-      "url": "http://opensource.org/licenses/apache2.0.php"
-    }
-  ],
+  "license": "(MIT OR Apache-2.0)",
   "bugs": {
     "url": "https://github.com/coolaj86/node-walk/issues"
   },
